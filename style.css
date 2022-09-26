@@ -11,6 +11,7 @@
 
 
 header{
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -32,6 +33,49 @@ header .cart-btn{
     color: #272727;
     padding: .5rem;
 }
+header .checkout{
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 17rem;
+    height: 100vh;
+    padding: .7rem;
+    background-color: white;
+    box-shadow: 0px 5px 10px 0px #0000003c;
+}
+header .checkout h2{
+    text-align: center;
+    padding: 1rem;
+    font-size: 1.4rem;
+    color: #272727;
+}
+header .cart-items{
+    border-bottom: 1px solid black;
+}
+header .total-price{
+    text-align: right;
+    font-size: .9rem;
+    padding: 1rem 0;
+}
+header .checkout .buy{
+    display: block;
+    cursor: pointer;
+    border: none;
+    background: #ff4444;
+    color: white;
+    font-weight: bold;
+    padding: .7rem 1rem;
+    margin: auto;
+}
+header .checkout .buy:hover{
+    background: #ff6a6a;
+}
+
+
+
+
+
+
 
 main{
     padding: 2rem;
@@ -41,13 +85,17 @@ main section.grid{
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 main section.products .shop-item{
-    position: relative;
     padding: .5rem .7rem;
-    
+    border: transparent; 
 }
 main section.products .shop-item:hover{
     transform: scale(0.97);
-    border: 1px solid #2f2f2f;
+    border: 1px solid #cecece;
+}
+main section.products .shop-item .flex{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 main section.products .shop-item .item-name{
     font-size: 1rem;
@@ -57,9 +105,6 @@ main section.products .shop-item img{
     width: 100%;
 }
 main section.products .shop-item .add-cart-btn{
-    position: absolute;
-    right: .7rem;
-    bottom: .7rem;
     cursor: pointer;
     color: #edecec;
     background: #2f2f2f;
