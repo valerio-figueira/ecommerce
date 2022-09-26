@@ -7,7 +7,7 @@
     <title>E-commerce</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/41d6a358ff.js" crossorigin="anonymous"></script>
-    <script src="./script/index.js" defer></script>
+    <script src="./script/index.js" defer type="module"></script>
 </head>
 <body>
     <header>
@@ -15,79 +15,25 @@
         <button class="fas fa-shopping-bag cart-btn"></button>
         <div class="checkout">
             <h2>Your Cart</h2>
-            <div class="cart-items"></div>
+            <div class="cart-items">
+               <!--
+                    <div class="item">
+                        <h3 class="item-name">Item Name <span class="fas fa-times rm-icon"></span></h3>
+                        <div class="flex">
+                            <img src="imgs/product1.jpg" alt="">
+                            <input type="number" name="" id="" class="quantity" min="0">
+                            <p class="item-price">$0.00</p>
+                        </div>
+                    </div>
+               -->                 
+            </div>
             <p class="total-price">Total <span>$0.00</span></p>
             <button type="submit" class="buy">Buy Now</button>
         </div>
     </header>
 
     <main>
-        <section class="grid products">
-            <div class="shop-item">
-                <img src="imgs/product1.jpg" alt="">
-                <h2 class="item-name">AEROREADY SHIRT</h2>
-                <div class="flex">                   
-                    <p class="item-price">$25</p>
-                    <button class="fas fa-shopping-bag add-cart-btn"></button>
-                </div>
-            </div>
-            <div class="shop-item">
-                <img src="imgs/product2.jpg" alt="">
-                <h2 class="item-name">WIRELESS EARBUDS</h2>
-                <div class="flex">                   
-                    <p class="item-price">$25</p>
-                    <button class="fas fa-shopping-bag add-cart-btn"></button>
-                </div>
-            </div>
-            <div class="shop-item">
-                <img src="imgs/product3.jpg" alt="">
-                <h2 class="item-name">HOODED PARKA</h2>
-                <div class="flex">                   
-                    <p class="item-price">$25</p>
-                    <button class="fas fa-shopping-bag add-cart-btn"></button>
-                </div>
-            </div>
-            <div class="shop-item">
-                <img src="imgs/product4.jpg" alt="">
-                <h2 class="item-name">STRAW METAL BOTTLE</h2>
-                <div class="flex">                   
-                    <p class="item-price">$25</p>
-                    <button class="fas fa-shopping-bag add-cart-btn"></button>
-                </div>
-            </div>
-            <div class="shop-item">
-                <img src="imgs/product5.jpg" alt="">
-                <h2 class="item-name">METAL SUNGLASSES</h2>
-                <div class="flex">                   
-                    <p class="item-price">$25</p>
-                    <button class="fas fa-shopping-bag add-cart-btn"></button>
-                </div>
-            </div>
-            <div class="shop-item">
-                <img src="imgs/product6.jpg" alt="">
-                <h2 class="item-name">BACK HAT</h2>
-                <div class="flex">                   
-                    <p class="item-price">$25</p>
-                    <button class="fas fa-shopping-bag add-cart-btn"></button>
-                </div>
-            </div>
-            <div class="shop-item">
-                <img src="imgs/product7.jpg" alt="">
-                <h2 class="item-name">BACKPACK</h2>
-                <div class="flex">                   
-                    <p class="item-price">$25</p>
-                    <button class="fas fa-shopping-bag add-cart-btn"></button>
-                </div>
-            </div>
-            <div class="shop-item">
-                <img src="imgs/product8.jpg" alt="">
-                <h2 class="item-name">ULTRABOOST 22</h2>
-                <div class="flex">                   
-                    <p class="item-price">$25</p>
-                    <button class="fas fa-shopping-bag add-cart-btn"></button>
-                </div>
-            </div>
-        </section>
+        <section class="grid products"></section>
     </main>
 
 </body>
