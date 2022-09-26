@@ -1,0 +1,73 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap');
+
+*{
+    font-family: 'Roboto', sans-serif;
+    box-sizing: border-box;    
+    margin: 0; padding: 0;
+    text-decoration: none;
+    transition: .3s linear;
+}
+
+
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    padding: 1.3rem 7%;
+    border-bottom: 1px solid #dcdcdc;
+}
+header a{
+    color: #272727;
+}
+header a:hover{
+    color: #22618e;
+}
+header .cart-btn{
+    cursor: pointer;
+    font-size: 1.3rem;
+    border: none;
+    background-color: transparent;
+    color: #272727;
+    padding: .5rem;
+}
+
+main{
+    padding: 2rem;
+}
+main section.grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+main section.products .shop-item{
+    position: relative;
+    padding: .5rem .7rem;
+    
+}
+main section.products .shop-item:hover{
+    transform: scale(0.97);
+    border: 1px solid #2f2f2f;
+}
+main section.products .shop-item .item-name{
+    font-size: 1rem;
+    padding: .5rem 0;
+}
+main section.products .shop-item img{
+    width: 100%;
+}
+main section.products .shop-item .add-cart-btn{
+    position: absolute;
+    right: .7rem;
+    bottom: .7rem;
+    cursor: pointer;
+    color: #edecec;
+    background: #2f2f2f;
+    padding: .3rem;
+    border: none;
+    font-size: 1.2rem;
+}
+main section.products .shop-item .add-cart-btn:hover{
+    color: #2f2f2f;
+    background: #edecec;
+}
