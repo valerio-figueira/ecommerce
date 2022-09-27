@@ -72,6 +72,7 @@ function setCart(item, cart){
     };
 
     quantityController();
+    removeCartItem(cart);    
 };
 
 function getItemHtml(name, img, price){
@@ -83,25 +84,49 @@ function getItemHtml(name, img, price){
                 <input type="number" class="quantity" min="1" value="1">
                 <p class="item-price">${price}</p>
             </div>
+            <span class="fa fa-close rm-icon"></span>
         </div>
     `;
+};
+
+function removeCartItem(cart){
+    const items = document.querySelectorAll(".checkout .cart-items .item");
+    for(let item of items){
+        item.addEventListener('click', event => {
+            if(event.target.matches(".rm-icon")){
+                const itemName = item.firstElementChild.innerHTML;
+                event.target.parentNode.remove();
+                refreshTotalPrice(items)                
+                //remove also from cart array
+                const match = cart.indexOf(itemName);
+                if(match > - 1){             
+                    cart.splice(match, 1);
+                };
+            };
+        });
+    };
+};
+
+function refreshTotalPrice(items){
+    const totalElement = document.querySelector(".checkout .total-price");
+    let total = 0;
+    items.forEach(item => {        
+        const priceTag = item.children[1].children[2];
+        total += Number(priceTag.innerHTML);
+        totalElement.innerHTML = Number(total).toFixed(2);
+    });
 };
 
 function quantityController(){
     const items = document.querySelectorAll(".cart-items .item");
     const totalPriceTag = document.querySelector(".checkout .total-price");
 
-    let total = 0;
-    items.forEach(item => {        
-        const priceTag = item.lastElementChild.lastElementChild;
-        total += Number(priceTag.innerHTML);
-        totalPriceTag.innerHTML = Number(total).toFixed(2);
-    })
+    refreshTotalPrice(items);
 
     items.forEach(item => {        
-        const priceTag = item.lastElementChild.lastElementChild;
+        const priceTag = item.children[1].children[2];
         const itemPrice = Number(priceTag.innerHTML);
-        const quantityTag = item.lastElementChild.children[1];
+        const quantityTag = item.children[1].children[1];
         
         let quantity;
         let totalPerItem;
