@@ -10,6 +10,16 @@
 }
 
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
 header{
     position: relative;
     display: flex;
@@ -61,6 +71,9 @@ header .total-price{
     font-size: .9rem;
     padding: 1rem 0;
 }
+header .total-price::before{
+    content: "Total $";
+}
 header .checkout .buy{
     display: block;
     cursor: pointer;
@@ -105,6 +118,9 @@ header .checkout .cart-items .item img{
 }
 header .checkout .cart-items .item .item-price{
     font-size: .9rem;
+}
+header .checkout .cart-items .item .item-price::before{
+    content: "$";
 }
 header .checkout .cart-items .item .quantity{
     width: 4rem;
@@ -153,6 +169,9 @@ main section.products .shop-item .item-name{
 main section.products .shop-item img{
     width: 100%;
 }
+main section.products .shop-item .item-price::before{
+    content: "$";
+}
 main section.products .shop-item .add-cart-btn{
     cursor: pointer;
     color: #edecec;
@@ -165,3 +184,32 @@ main section.products .shop-item .add-cart-btn:hover{
     color: #2f2f2f;
     background: #edecec;
 }
+
+
+/*btn animation*/
+main section.products .shop-item .add-cart-btn.rejected{
+    background: #ff6a6a;
+    animation-name: animation;
+    animation-duration: .5s;
+    animation-timing-function: 0s;
+    animation-delay: 0s;
+    animation-direction: alternate;
+}
+
+@keyframes animation {
+    0% {
+        transform: translateY(-5px);
+    }
+    25%{
+        transform: translateY(5px);
+    }
+    50%{
+        transform: translateY(-5px);
+    }
+    75%{
+        transform: translateY(5px);
+    }
+    100%{
+        transform: translateY(0);
+    }
+};
