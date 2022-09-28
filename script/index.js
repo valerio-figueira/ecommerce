@@ -1,5 +1,8 @@
-import products from "./Products.js";
+import Products from "./Products.js";
 
+const shopItems = Products;
+
+//open and close cart bar
 openCart();
 function openCart(){
     const shopTab = document.querySelector("header .checkout");
@@ -13,9 +16,11 @@ function openCart(){
     });
 };
 
+
+//render all products in the page
 renderProducts();
 function renderProducts(){
-    document.querySelector(".products").innerHTML = products.map(item => {
+    document.querySelector(".products").innerHTML = shopItems.map(item => {
         return `
             <div class="shop-item">
                 <img src="${item.img}" alt="${item.name}">
@@ -30,76 +35,85 @@ function renderProducts(){
 };
 
 
-
-
-
-addItemsToCart();
-function addItemsToCart(){   
-    const cart = []; 
-    const shopContainer = document.querySelectorAll("section .shop-item");
-    shopContainer.forEach(shopItem => {
-        shopItem.addEventListener('click', event => {
-            if(event.target.matches(".add-cart-btn")){
-                setCart(shopItem, cart);
-            } else{
-                console.log(event.target)
-            };
-        });
-    });
-};
-
-function setCart(item, cart){
-    const container = document.querySelector(".checkout .cart-items");
-    const items = document.querySelectorAll(".checkout .cart-items .item");
-
-    const name = item.firstElementChild.nextElementSibling.innerHTML;
-    const img = item.firstElementChild.getAttribute("src");
-    const price = item.lastElementChild.firstElementChild.innerHTML;
-
-    console.log(name + " name on click")
-
-    if(items.length > 0){
-        if(!cart.find(item => item === name)){
-            cart.push(name);
-            container.innerHTML += getItemHtml(name, img, price);
-        } else{
-            console.log("Item already in the cart")
-            buttonAnimation(item);
-        }
-    } else{
-        cart.push(name);
-        container.innerHTML += getItemHtml(name, img, price);
-    };
-
-    quantityController();
-    removeCartItem(cart);    
-};
-
-function getItemHtml(name, img, price){
+function getCartItemHtml(item){
     return `
         <div class="item">
-            <h3 class="item-name">${name}</h3>
+            <h3 class="item-name">${item.name}</h3>
             <div class="flex">
-                <img src="${img}" alt="${name}">
-                <input type="number" class="quantity" min="1" value="1">
-                <p class="item-price">${price}</p>
+                <img src="${item.img}" alt="${item.name}">
+                <input type="number" class="quantity" min="1" required>
+                <p class="item-price">${item.price.toFixed(2)}</p>
             </div>
             <span class="fa fa-close rm-icon"></span>
         </div>
     `;
 };
 
+
+
+
+pushItemToCart();
+function pushItemToCart(){   
+    const cart = [];
+    const itemsTag = document.querySelectorAll("section .shop-item");
+    itemsTag.forEach(itemTag => {
+        itemTag.addEventListener('click', event => {
+            //if add button is clicked
+            if(event.target.matches(".add-cart-btn")){
+                setCart(itemTag, cart);
+            }
+        });
+    });
+};
+
+function setCart(itemTag, cart){
+    const container = document.querySelector(".checkout .cart-items");
+    const convertedItem = convertTagIntoObject(itemTag);
+
+    if(findMatchItem(convertedItem, cart)){
+        cart.push(convertedItem.name);
+        container.innerHTML += getCartItemHtml(convertedItem);
+    } else{
+        console.error("Item already in the cart")
+        buttonAnimation(itemTag);
+    }
+
+    quantityController();
+    removeCartItem(cart);
+};
+
+function convertTagIntoObject(itemTag){
+    const name = itemTag.children[1].innerHTML;
+    return shopItems.find(item => item.name === name);
+}
+
+function findMatchItem(item, cart){
+    const items = document.querySelectorAll(".checkout .cart-items .item");
+    if(items.length > 0){
+        //search for possible match (duplicate items)
+        if(!cart.find(matchName => matchName === item.name)){
+            return true;
+        } else{
+            return false;
+        }
+    } else{
+        //add first item
+        return true;
+    };
+}
+
 function removeCartItem(cart){
     const items = document.querySelectorAll(".checkout .cart-items .item");
+
     for(let item of items){
         item.addEventListener('click', event => {
             if(event.target.matches(".rm-icon")){
                 const itemName = item.firstElementChild.innerHTML;
-                event.target.parentNode.remove();
-                refreshTotalPrice(items)                
+                event.target.parentNode.remove(); 
+                refreshTotalPrice();     
                 //remove also from cart array
                 const match = cart.indexOf(itemName);
-                if(match > - 1){             
+                if(match > -1){
                     cart.splice(match, 1);
                 };
             };
@@ -107,43 +121,69 @@ function removeCartItem(cart){
     };
 };
 
-function refreshTotalPrice(items){
+function refreshTotalPrice(){
+    const items = document.querySelectorAll(".cart-items .item");
     const totalElement = document.querySelector(".checkout .total-price");
     let total = 0;
-    items.forEach(item => {        
-        const priceTag = item.children[1].children[2];
-        total += Number(priceTag.innerHTML);
-        totalElement.innerHTML = Number(total).toFixed(2);
-    });
+    if(items.length > 0){
+        items.forEach(item => {   
+            const priceTag = item.children[1].children[2];
+            total += Number(priceTag.innerHTML);
+            totalElement.innerHTML = Number(total).toFixed(2);
+        });
+    } else{
+        totalElement.innerHTML = 0;
+    }
 };
+
+function refreshItemPrice(quantityTag, itemPrice){
+    return quantityTag.value * itemPrice;    
+}
+
 
 function quantityController(){
     const items = document.querySelectorAll(".cart-items .item");
-    const totalPriceTag = document.querySelector(".checkout .total-price");
-
     refreshTotalPrice(items);
+    
 
     items.forEach(item => {        
         const priceTag = item.children[1].children[2];
         const itemPrice = Number(priceTag.innerHTML);
         const quantityTag = item.children[1].children[1];
+
         
-        let quantity;
-        let totalPerItem;
-        
+        if(quantityTag.value == ""){
+            quantityTag.value = 1;
+        };
+
+        quantityTag.addEventListener('change', event => {
+            console.log(event.target.value)
+        });
+
+        quantityTag.addEventListener('keydown', event => {
+            if(event.key.match("Backspace")){
+                if(quantityTag.value.length == 1){
+                    quantityTag.value = 0;
+                    priceTag.innerHTML = refreshItemPrice(quantityTag, itemPrice);
+                    refreshTotalPrice(items);
+                };
+            };
+            if(event.key.match("Del")){
+                if(quantityTag.value.length == 1){
+                    quantityTag.value = 0;
+                    priceTag.innerHTML = refreshItemPrice(quantityTag, itemPrice);
+                    refreshTotalPrice(items);
+                };
+            };
+        });
 
         quantityTag.addEventListener('input', event => {
             let filteredInput = Number(event.target.value);
-            let total = 0;
+            
             if(event.target.value.match(filteredInput)){
-                console.log("Filtered with success")
-                quantity = filteredInput;
-                totalPerItem = itemPrice * quantity;
-                priceTag.innerHTML = Number(totalPerItem).toFixed(2);
-                total = totalPerItem;
-                totalPriceTag.innerHTML = total;
-            } else{
-                console.error("It must be a number");
+                let price = refreshItemPrice(quantityTag, itemPrice)
+                priceTag.innerHTML = Number(price).toFixed(2);
+                refreshTotalPrice();
             };
         });
     });
@@ -152,7 +192,6 @@ function quantityController(){
 
 function buttonAnimation(item){
     const btn = item.lastElementChild.lastElementChild;
-    console.log(btn);
     if(!btn.matches(".rejected")){
         btn.classList.add("rejected");        
         setTimeout(() => btn.classList.remove("rejected"), 1000);
