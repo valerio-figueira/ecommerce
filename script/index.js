@@ -53,25 +53,24 @@ function getCartItemHtml(item){
 
 
 pushItemToCart();
-function pushItemToCart(){   
-    const cart = [];
-    const itemsTag = document.querySelectorAll("section .shop-item");
-    itemsTag.forEach(itemTag => {
+function pushItemToCart(){
+    const itemsTags = document.querySelectorAll("section .shop-item");
+    itemsTags.forEach(itemTag => {
         itemTag.addEventListener('click', event => {
             //if add button is clicked
             if(event.target.matches(".add-cart-btn")){
-                setCart(itemTag, cart);
+                setCart(itemTag);
             }
         });
     });
 };
 
-function setCart(itemTag, cart){
+function setCart(itemTag){
     const container = document.querySelector(".checkout .cart-items");
     const convertedItem = convertTagIntoObject(itemTag);
+    console.log(convertedItem)
 
-    if(findMatchItem(convertedItem, cart)){
-        cart.push(convertedItem.name);
+    if(searchForDuplicates(convertedItem)){
         container.innerHTML += getCartItemHtml(convertedItem);
     } else{
         console.error("Item already in the cart")
@@ -79,7 +78,7 @@ function setCart(itemTag, cart){
     }
 
     quantityController();
-    removeCartItem(cart);
+    //removeCartItem(cart);
 };
 
 function convertTagIntoObject(itemTag){
@@ -87,15 +86,19 @@ function convertTagIntoObject(itemTag){
     return shopItems.find(item => item.name === name);
 }
 
-function findMatchItem(item, cart){
-    const items = document.querySelectorAll(".checkout .cart-items .item");
-    if(items.length > 0){
+function searchForDuplicates(item){
+    const itemsTags = document.querySelectorAll(".checkout .cart-items .item");
+    if(itemsTags.length > 0){
         //search for possible match (duplicate items)
-        if(!cart.find(matchName => matchName === item.name)){
-            return true;
-        } else{
-            return false;
-        }
+        itemsTags.map(itemTag => {
+            const name = itemTag.firstElementChild.innerHTML;
+            if(item.name === name){
+                return false;
+            } else{
+                console.log("passed")
+                return true;
+            };
+        })
     } else{
         //add first item
         return true;
