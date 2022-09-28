@@ -87,18 +87,22 @@ function convertTagIntoObject(itemTag){
 }
 
 function searchForDuplicates(item){
-    const itemsTags = document.querySelectorAll(".checkout .cart-items .item");
+    const itemsTags = document.querySelectorAll(".checkout .cart-items .item");    
     if(itemsTags.length > 0){
         //search for possible match (duplicate items)
-        itemsTags.map(itemTag => {
+        const array = []
+        for(let itemTag of itemsTags){
             const name = itemTag.firstElementChild.innerHTML;
-            if(item.name === name){
-                return false;
-            } else{
-                console.log("passed")
+            if(array.find(match => match !== name)){
+                console.log("passed 1")
+                array.push(name);
                 return true;
-            };
-        })
+            } else {
+                console.log("passed false")
+                return false;
+            }
+        };
+        console.log(array)
     } else{
         //add first item
         return true;
