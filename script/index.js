@@ -20,6 +20,7 @@ function openCart(){
 //render all products in the page
 renderProducts();
 function renderProducts(){
+    document.querySelector(".total-price").innerHTML = "0.00";
     document.querySelector(".products").innerHTML = shopItems.map(item => {
         return `
             <div class="shop-item" id="${item.id}">
@@ -212,3 +213,10 @@ function buttonAnimation(item){
         setTimeout(() => btn.classList.remove("rejected"), 1000);
     };
 };
+
+
+
+//COPYRIGHT DATE
+let year = new Date().getFullYear();
+document.querySelector(".copyright")
+.innerHTML = `\u00A9 All rights reserved ${year} - Ecommerce`;
