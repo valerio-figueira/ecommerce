@@ -22,7 +22,7 @@ renderProducts();
 function renderProducts(){
     document.querySelector(".products").innerHTML = shopItems.map(item => {
         return `
-            <div class="shop-item">
+            <div class="shop-item" id="${item.id}">
                 <img src="${item.img}" alt="${item.name}">
                 <h2 class="item-name">${item.name}</h2>
                 <div class="flex">                  
@@ -37,7 +37,7 @@ function renderProducts(){
 
 function getCartItemHtml(item){
     return `
-        <div class="item">
+        <div class="item" id="${item.id}">
             <h3 class="item-name">${item.name}</h3>
             <div class="flex">
                 <img src="${item.img}" alt="${item.name}">
@@ -68,7 +68,6 @@ function pushItemToCart(){
 function setCart(itemTag){
     const container = document.querySelector(".checkout .cart-items");
     const convertedItem = convertTagIntoObject(itemTag);
-    console.log(convertedItem)
 
     if(searchForDuplicates(convertedItem)){
         container.innerHTML += getCartItemHtml(convertedItem);
@@ -78,51 +77,41 @@ function setCart(itemTag){
     }
 
     quantityController();
-    //removeCartItem(cart);
+    removeCartItem();
 };
 
-function convertTagIntoObject(itemTag){
-    const name = itemTag.children[1].innerHTML;
-    return shopItems.find(item => item.name === name);
+
+function convertTagIntoObject(itemTag){    
+    return shopItems.find(item => item.id == itemTag.id);
 }
 
 function searchForDuplicates(item){
-    const itemsTags = document.querySelectorAll(".checkout .cart-items .item");    
+    const itemsTags = document.querySelectorAll(".checkout .cart-items .item");
     if(itemsTags.length > 0){
         //search for possible match (duplicate items)
-        const array = []
         for(let itemTag of itemsTags){
-            const name = itemTag.firstElementChild.innerHTML;
-            if(array.find(match => match !== name)){
-                console.log("passed 1")
-                array.push(name);
-                return true;
-            } else {
-                console.log("passed false")
+            if(itemTag.id.match(item.id)){
                 return false;
-            }
+            };
         };
-        console.log(array)
+        return true;
     } else{
         //add first item
         return true;
     };
-}
+};
 
-function removeCartItem(cart){
+function removeCartItem(){
     const items = document.querySelectorAll(".checkout .cart-items .item");
 
     for(let item of items){
         item.addEventListener('click', event => {
             if(event.target.matches(".rm-icon")){
-                const itemName = item.firstElementChild.innerHTML;
-                event.target.parentNode.remove(); 
-                refreshTotalPrice();     
-                //remove also from cart array
-                const match = cart.indexOf(itemName);
-                if(match > -1){
-                    cart.splice(match, 1);
-                };
+                const convertedItem = convertTagIntoObject(item);
+                const index = shopItems.indexOf(convertedItem);
+                event.target.parentNode.remove();
+                refreshPricePerItem(index);
+                refreshTotalPrice();
             };
         });
     };
@@ -140,46 +129,45 @@ function refreshTotalPrice(){
         });
     } else{
         totalElement.innerHTML = 0;
-    }
+    };
 };
-
-function refreshItemPrice(quantityTag, itemPrice){
-    return quantityTag.value * itemPrice;    
-}
 
 
 function quantityController(){
     const items = document.querySelectorAll(".cart-items .item");
-    refreshTotalPrice(items);
-    
 
-    items.forEach(item => {        
+    refreshTotalPrice(items);    
+
+    items.forEach(item => { 
+        const itemObject = convertTagIntoObject(item);
+        const index = shopItems.indexOf(itemObject);
         const priceTag = item.children[1].children[2];
-        const itemPrice = Number(priceTag.innerHTML);
         const quantityTag = item.children[1].children[1];
 
-        
-        if(quantityTag.value == ""){
-            quantityTag.value = 1;
-        };
-
-        quantityTag.addEventListener('change', event => {
-            console.log(event.target.value)
-        });
+        priceTag.innerHTML = Number(shopItems[index].total).toFixed(2);
+        quantityTag.value = shopItems[index].quantity;
 
         quantityTag.addEventListener('keydown', event => {
             if(event.key.match("Backspace")){
                 if(quantityTag.value.length == 1){
-                    quantityTag.value = 0;
-                    priceTag.innerHTML = refreshItemPrice(quantityTag, itemPrice);
-                    refreshTotalPrice(items);
+                    document.addEventListener('click', event => {
+                        if(event.target != quantityTag){
+                            if(quantityTag.value == ""){
+                                quantityTag.value = shopItems[index].quantity;                                
+                            };
+                        };
+                    });
                 };
             };
             if(event.key.match("Del")){
                 if(quantityTag.value.length == 1){
-                    quantityTag.value = 0;
-                    priceTag.innerHTML = refreshItemPrice(quantityTag, itemPrice);
-                    refreshTotalPrice(items);
+                    document.addEventListener('click', event => {
+                        if(event.target != quantityTag){
+                            if(quantityTag.value == ""){
+                                quantityTag.value = shopItems[index].quantity;                                
+                            };
+                        };
+                    });
                 };
             };
         });
@@ -188,13 +176,33 @@ function quantityController(){
             let filteredInput = Number(event.target.value);
             
             if(event.target.value.match(filteredInput)){
-                let price = refreshItemPrice(quantityTag, itemPrice)
-                priceTag.innerHTML = Number(price).toFixed(2);
+                document.addEventListener('click', event => {
+                    if(filteredInput === 0){
+                        if(event.target != quantityTag){
+                            quantityTag.value = 1;
+                            filteredInput = quantityTag.value;
+                            refreshPricePerItem(index, filteredInput, priceTag);
+                            refreshTotalPrice();
+                        };
+                    };
+                });
+                refreshPricePerItem(index, filteredInput, priceTag);
                 refreshTotalPrice();
             };
         });
     });
 };
+
+function refreshPricePerItem(index, quantity = 1, priceTag = undefined){
+    shopItems[index].quantity = quantity;
+    shopItems[index].total = 
+    shopItems[index].quantity * 
+    shopItems[index].price;
+    if(priceTag !== undefined){
+        priceTag.innerHTML = 
+        Number(shopItems[index].total).toFixed(2);
+    }
+}
 
 
 function buttonAnimation(item){

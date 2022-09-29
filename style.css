@@ -43,21 +43,23 @@ header .cart-btn{
     color: #272727;
     padding: .5rem;
 }
+header .cart-btn:hover{
+    color: #22618e;
+}
 header .checkout{
     position: absolute;
     top: 100%;
     right: 0;
     z-index: 1000;
     width: 20rem;
-    height: 0;
-    padding: 0;
+    height: 100vh;
+    padding: .7rem;
     background-color: white;
     box-shadow: 0px 5px 10px 0px #0000003c;
+    transform: translateX(100%);
 }
 header .checkout.open{
-    right: 0;
-    padding: .7rem;
-    height: 100vh;
+    transform: translateX(0);
 }
 header .checkout h2{
     text-align: center;
@@ -72,9 +74,12 @@ header .total-price{
     text-align: right;
     font-size: .9rem;
     padding: 1rem 0;
+    color: #59b759;
+    font-weight: bold;
 }
 header .total-price::before{
     content: "Total $";
+    font-size: .8rem;
 }
 header .checkout .buy{
     display: block;
@@ -96,6 +101,9 @@ header .checkout{
 }
 header .checkout .cart-items .item{
     position: relative;
+    padding: .5rem;
+    margin: 1rem 0;
+    border: 1px solid #eaeaea;
 }
 header .checkout .cart-items .item .flex{
     display: flex;
@@ -110,8 +118,9 @@ header .checkout .cart-items .item .item-name{
 header .checkout .cart-items .item .rm-icon{
     cursor: pointer;
     position: absolute;
-    right: 0;
-    top: 0.3rem;
+    right: 0.8rem;
+    top: .5rem;
+    padding: .3rem;
     color: #2f2f2f;
     font-size: .9rem;
 }
@@ -123,9 +132,11 @@ header .checkout .cart-items .item img{
 }
 header .checkout .cart-items .item .item-price{
     font-size: .9rem;
+    color: #479c47;
 }
 header .checkout .cart-items .item .item-price::before{
     content: "$";
+    font-size: .7rem;
 }
 header .checkout .cart-items .item .quantity{
     width: 4rem;
@@ -155,7 +166,7 @@ main section.grid{
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 main section.products .shop-item{
-    padding: .5rem .7rem;
+    padding: 1.2rem;
     border: transparent; 
 }
 main section.products .shop-item:hover{
@@ -179,21 +190,21 @@ main section.products .shop-item .item-price::before{
 }
 main section.products .shop-item .add-cart-btn{
     cursor: pointer;
-    color: #edecec;
-    background: #2f2f2f;
+    color: #272727;
+    background-color: transparent;    
     padding: .3rem;
     border: none;
     font-size: 1.2rem;
 }
 main section.products .shop-item .add-cart-btn:hover{
-    color: #2f2f2f;
-    background: #edecec;
+    color: #479c47;
 }
 
 
 /*btn animation*/
 main section.products .shop-item .add-cart-btn.rejected{
-    background: #ff6a6a;
+    background: transparent;
+    color: #ff6a6a;
     animation-name: animation;
     animation-duration: .5s;
     animation-timing-function: 0s;
