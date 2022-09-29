@@ -6,16 +6,19 @@ const shopItems = Products;
 openCart();
 function openCart(){
     const shopTab = document.querySelector("header .checkout");
-
+    const closeBtn = document.querySelector(".checkout .close-btn");
     document.querySelector("header .cart-btn").addEventListener('click', () => {
-        if(shopTab.className === "checkout") {
-            shopTab.classList.add("open");
-        } else {
-            shopTab.classList.remove("open");
+        if(!shopTab.matches(".open")) {
+            shopTab.classList.add("open");            
         };
     });
+    closeCart(shopTab, closeBtn);
 };
-
+function closeCart(shopTab, closeBtn){
+    closeBtn.addEventListener('click', () => {
+        shopTab.classList.remove("open");
+    });
+};
 
 //render all products in the page
 renderProducts();
