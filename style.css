@@ -37,6 +37,10 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+body{
+    min-width: 360px;
+}
+
 
 header{
     position: relative;
@@ -200,7 +204,7 @@ main{
 }
 main section.grid{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 }
 main section.products .shop-item{
     padding: 1.2rem;
@@ -292,3 +296,12 @@ footer .copyright{
         transform: translateY(0);
     }
 };
+
+
+
+@media screen and (max-width: 665px) {
+    main section.grid{
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+}
