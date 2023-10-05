@@ -204,7 +204,12 @@ main{
 }
 main section.grid{
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    grid-template-rows: max-content;
+    align-content: space-between;
+    justify-content: space-between;
+    min-height: 70vh;
+    max-height: 100%;
 }
 main section.products .shop-item{
     padding: 1.2rem;
